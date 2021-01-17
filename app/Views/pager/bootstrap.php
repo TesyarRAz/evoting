@@ -1,4 +1,4 @@
-<?php $pager->setSurroundCount(2); ?>
+<?php $pager->setSurroundCount(0); ?>
 
 <nav aria-label="<?= lang('Pager.pageNavigation') ?>">
 	<ul class="pagination">

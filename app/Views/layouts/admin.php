@@ -157,4 +157,11 @@ Dashboard
 
 <?= $this->section('js') ?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/startbootstrap-sb-admin-2/4.1.3/js/sb-admin-2.min.js" integrity="sha512-COtY6/Rv4GyQdDShOyay/0YI4ePJ7QeKwtJIOCQ3RNE32WOPI4IYxq6Iz5JWcQpnylt/20KBvqEROZTEj/Hopw==" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+<script type="text/javascript">
+	<?php if (session()->has('status')): ?>
+		Swal.fire("Informasi", '<?= session('status') ?>', 'info');
+	<?php endif ?>
+</script>
 <?= $this->endSection() ?>

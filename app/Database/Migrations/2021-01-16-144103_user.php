@@ -17,7 +17,7 @@ class User extends Migration
 				'null' => true
 			],
 			"role enum('siswa', 'guru', 'admin') not null default 'admin'",
-			'phone varchar(15) not null',
+			'phone varchar(15)',
 		])
 		->addForeignKey('kelas_id', 'kelas', 'id')
 		->createTable('users');

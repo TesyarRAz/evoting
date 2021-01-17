@@ -1,26 +1,21 @@
 <?= $this->extend('layouts/admin') ?>
 
 <?= $this->section('content_header') ?>
-Kelola Pemilih
+Kelola Event
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
 
-<?= $this->include('admin/pemilih/create') ?>
-<?= $this->include('admin/pemilih/edit') ?>
-<?= $this->include('admin/pemilih/import') ?>
+<?= $this->include('admin/event/create') ?>
+<?= $this->include('admin/event/edit') ?>
 
 <div class="card">
 	<div class="card-header">
 		<div class="row">
 			<div class="col">
-				<h6 class="text-primary font-weight-bold">Daftar Pemilih</h6>
+				<h6 class="text-primary font-weight-bold">Daftar Event</h6>
 			</div>
 			<div class="ml-auto">
-				<button type="button" class="btn btn-sm btn-outline-primary" data-toggle="modal" data-target="#modal-import">
-					<i class="fas fa-download"></i>
-					Import
-				</button>
 				<button type="button" class="btn btn-sm btn-outline-primary" data-toggle="modal" data-target="#modal-create">
 					<i class="fas fa-plus"></i>
 					Tambah
@@ -34,21 +29,23 @@ Kelola Pemilih
 				<tr>
 					<th>No</th>
 					<th>Nama</th>
+					<th>Aktif</th>
 					<th>Aksi</th>
 				</tr>
 			</thead>
 			<tbody>
 				<?php $i = 0; ?>
-				<?php foreach ($pemilihs as $d): ?>
+				<?php foreach ($events as $d): ?>
 					<tr>
 						<td><?= ++$i ?></td>
 						<td><?= $d['name'] ?></td>
+						<td><?= $d['aktif'] ? "Aktif" : "Tidak" ?></td>
 						<td>
 							<a class="btn btn-sm btn-primary" href="#" onclick="action_edit(<?= $d['id'] ?>)">
 								<i class="fas fa-book"></i>
 								Edit
 							</a>
-							<a class="btn btn-sm btn-danger" href="<?= site_url('admin/pemilih/destroy/' . $d['id']) ?>" onclick="return confirm('Yakin ingin dihapus?')">
+							<a class="btn btn-sm btn-danger" href="<?= site_url('admin/event/destroy/' . $d['id']) ?>" onclick="return confirm('Yakin ingin dihapus?')">
 								<i class="fas fa-trash"></i>
 								Hapus
 							</a>
