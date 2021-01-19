@@ -29,30 +29,9 @@ Dashboard
 		<hr class="sidebar-divider my-0">
 
 		<!-- Nav Item - Dashboard -->
-		<li class="nav-item <?= $request->uri->getPath() == 'admin' ? 'active' : '' ?>">
+		<li class="nav-item <?= $request->uri->getPath() == 'siswa' ? 'active' : '' ?>">
 			<a class="nav-link" href="<?= site_url('/') ?>">
 				<i class="fas fa-fw fa-tachometer-alt"></i>
-				<span>Dashboard</span>
-			</a>
-		</li>
-
-		<!-- Divider -->
-		<hr class="sidebar-divider">
-
-		<!-- Heading -->
-		<div class="sidebar-heading">
-			Pengelolaan
-		</div>
-		<li class="nav-item <?= $request->uri->getPath() == 'admin/pemilih/index' ? 'active' : '' ?>">
-			<a class="nav-link" href="<?= site_url('admin/pemilih/index') ?>">
-				<i class="fas fa-fw fa-user"></i>
-				<span>Pemilih</span>
-			</a>
-		</li>
-		<!-- Nav Item - Charts -->
-		<li class="nav-item <?= $request->uri->getPath() == 'admin/event/index' ? 'active' : '' ?>">
-			<a class="nav-link" href="<?= site_url('admin/event/index') ?>">
-				<i class="fas fa-fw fa-vote-yea"></i>
 				<span>Event</span>
 			</a>
 		</li>

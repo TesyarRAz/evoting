@@ -1,19 +1,17 @@
-<?php $pager->setSurroundCount(0); ?>
+<?php $pager->setSurroundCount(5); ?>
 
 <nav aria-label="<?= lang('Pager.pageNavigation') ?>">
-	<ul class="pagination">
-		<?php if ($pager->hasPrevious()) : ?>
-			<li class="page-item">
-				<a class="page-link" href="<?= $pager->getFirst() ?>" aria-label="<?= lang('Pager.first') ?>">
-					<span aria-hidden="true"><?= lang('Pager.first') ?></span>
-				</a>
-			</li>
-			<li class="page-item">
-				<a class="page-link" href="<?= $pager->getPrevious() ?>" aria-label="<?= lang('Pager.previous') ?>">
-					<span aria-hidden="true"><?= lang('Pager.previous') ?></span>
-				</a>
-			</li>
-		<?php endif ?>
+	<ul class="pagination justify-content-end">
+		<li class="page-item <?= !$pager->hasPrevious() ? 'disabled' : '' ?>">
+			<a class="page-link" href="<?= $pager->getFirst() ?>" aria-label="<?= lang('Pager.first') ?>">
+				<span aria-hidden="true"><?= lang('Pager.first') ?></span>
+			</a>
+		</li>
+		<li class="page-item <?= !$pager->hasPrevious() ? 'disabled' : '' ?>">
+			<a class="page-link" href="<?= $pager->getPrevious() ?>" aria-label="<?= lang('Pager.previous') ?>">
+				<span aria-hidden="true">&laquo;</span>
+			</a>
+		</li>
 
 		<?php foreach ($pager->links() as $link) : ?>
 			<li class="page-item <?= $link['active'] ? 'active' : '' ?>">
@@ -23,17 +21,23 @@
 			</li>
 		<?php endforeach ?>
 
-		<?php if ($pager->hasNext()) : ?>
+		<?php if (empty($pager->links())): ?>
 			<li class="page-item">
-				<a class="page-link" href="<?= $pager->getNext() ?>" aria-label="<?= lang('Pager.next') ?>">
-					<span aria-hidden="true"><?= lang('Pager.next') ?></span>
-				</a>
-			</li>
-			<li class="page-item">
-				<a class="page-link" href="<?= $pager->getLast() ?>" aria-label="<?= lang('Pager.last') ?>">
-					<span aria-hidden="true"><?= lang('Pager.last') ?></span>
+				<a class="page-link" href="#">
+					1
 				</a>
 			</li>
 		<?php endif ?>
+
+		<li class="page-item <?= !$pager->hasPrevious() ? 'disabled' : '' ?>">
+			<a class="page-link" href="<?= $pager->getNext() ?>" aria-label="<?= lang('Pager.next') ?>">
+				<span aria-hidden="true">&raquo;</span>
+			</a>
+		</li>
+		<li class="page-item <?= !$pager->hasPrevious() ? 'disabled' : '' ?>">
+			<a class="page-link" href="<?= $pager->getLast() ?>" aria-label="<?= lang('Pager.last') ?>">
+				<span aria-hidden="true"><?= lang('Pager.last') ?></span>
+			</a>
+		</li>
 	</ul>
 </nav>

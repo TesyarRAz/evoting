@@ -1,24 +1,25 @@
-<form enctype="multipart/form-data" method="post" action="<?= site_url('admin/pemilih/import') ?>" class="modal fade" tabindex="-1" role="dialog" id="modal-import">
+<form enctype="multipart/form-data" method="post" action="<?= site_url('admin/team/store/' . $event_data['id']) ?>" class="modal fade" tabindex="-1" role="dialog" id="modal-create">
 	<?= csrf_field() ?>
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title">Import Pemilih</h5>
+				<h5 class="modal-title">Tambah Team</h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
 			<div class="modal-body">
 				<div class="form-group">
-					<a href="<?= base_url('sample_pemilih.csv') ?>" class="btn btn-lg btn-danger" _target="_blank">Format File, Klik Disini</a>
+					<label>Nama</label>
+					<input type="text" name="name" class="form-control" required>
 				</div>
 				<div class="form-group">
-					<label>Berkas</label>
-					<input type="file" name="berkas" class="form-control-file" accept="text/csv" required>
+					<label>Deskripsi</label>
+					<textarea class="form-control" name="deskripsi" required></textarea>
 				</div>
 				<div class="form-group">
-					<label>Delimiter CSV</label>
-					<input type="text" name="delimiter" class="form-control" value=";" required>
+					<label>Gambar</label>
+					<input type="file" name="gambar" class="form-control-file" accept="image/*" required>
 				</div>
 			</div>
 			<div class="modal-footer">

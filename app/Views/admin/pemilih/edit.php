@@ -22,16 +22,8 @@
 					</select>
 				</div>
 				<div class="form-group">
-					<label>Username</label>
-					<input id="username-edit" type="text" name="username" class="form-control" placeholder="Bisa dikosongkan, otomatis generate system">
-				</div>
-				<div class="form-group">
-					<label>Password</label>
-					<input type="text" name="password" class="form-control" placeholder="Bisa dikosongkan, otomatis generate system">
-				</div>
-				<div class="form-group">
-					<label>Phone</label>
-					<input id="phone-edit" type="tlp" name="phone" class="form-control" placeholder="Optional, Untuk mengirim link login">
+					<label>Email</label>
+					<input id="email-edit" type="email" name="email" class="form-control" placeholder="Wajib, untuk kirim email akses">
 				</div>
 			</div>
 			<div class="modal-footer">
@@ -49,8 +41,7 @@
 		$.getJSON(`<?= site_url('admin/pemilih/edit') ?>/${id}`, data => {
 			$("#name-edit").val(data.name);
 			$("#kelas-edit").val(data.kelas_id);
-			$("#username-edit").val(data.username);
-			$("#phone-edit").val(data.phone);
+			$("#email-edit").val(data.email);
 
 			$("#modal-edit").modal();
 		});

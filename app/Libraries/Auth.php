@@ -28,9 +28,9 @@ class Auth
 		return session()->has('user_id');
 	}
 
-	public function attempt($credentials)
+	public function attempt($credentials, $hash = false)
 	{
-		if (isset($credentials['password']))
+		if (isset($credentials['password']) && $hash)
 		{
 			$password = $credentials['password'];
 
@@ -39,24 +39,30 @@ class Auth
 
 		$user = model('User')->where($credentials)->first();
 
-		if (!empty($user) && isset($password))
+		if (!empty($user))
 		{
-			if (password_verify($password, $user['password']))
+			if (isset($password) && !password_verify($password, $user['password']))
 			{
-				$this->login($user);
-
-				return true;
+				return false;
 			}
+
+			return $this->login($user);
 		}
 	}
 
 	public function login($user)
 	{
 		session()->set('user_id', $user['id']);
+		session()->set('role', $user['role']);
+		session()->set('name', $user['name']);
+
+		return true;
 	}
 
 	public function logout()
 	{
-		session()->remove('user_id');
+		session()->destroy();
+
+		return true;
 	}
 }

@@ -11,6 +11,7 @@ class Filters extends BaseConfig
 		'toolbar'  => \CodeIgniter\Filters\DebugToolbar::class,
 		'honeypot' => \CodeIgniter\Filters\Honeypot::class,
 		'auth' => \App\Filters\Authenticate::class,
+		'role' => \App\Filters\Role::class,
 	];
 
 	// Always applied before every request
@@ -36,8 +37,13 @@ class Filters extends BaseConfig
 	public $filters = [
 		'auth' => [
 			'before' => [
-				'/', '/home/login'
+				'/*', 'home/login',
 			]
-		]
+		],
+		'role' => [
+			'before' => [
+				'admin', 'siswa', 'admin/*', 'siswa/*'
+			],
+		],
 	];
 }

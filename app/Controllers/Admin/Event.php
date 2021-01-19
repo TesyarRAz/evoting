@@ -21,14 +21,16 @@ class Event extends BaseController
 	public function store()
 	{
 		helper('text');
+		$event = model('Event');
 
 		$data = $this->request->getVar([
 			'name', 'aktif', 'keterangan', 'password'
 		]);
 
 		$data['aktif'] = !empty($data['aktif']);
+		$data['password'] = random_string();
 
-		if (model('Event')->insert($data))
+		if ($event->insert($data))
 		{
 			return redirect()->back()->with('status', 'Berhasil tambah event');
 		}
@@ -42,12 +44,12 @@ class Event extends BaseController
 		{
 			$event = model('Event');
 
-			if (!$pemilih = $event->find($event_id))
+			if (!$event_data = $event->find($event_id))
 			{
 				throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
 			}
 
-			return $this->respond($pemilih);
+			return $this->respond($event_data);
 		}
 	}
 
@@ -55,7 +57,7 @@ class Event extends BaseController
 	{
 		$event = model('Event');
 
-		if (!$data = $event->find($event_id))
+		if (!$event->find($event_id))
 		{
 			throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
 		}
@@ -66,22 +68,147 @@ class Event extends BaseController
 
 		$data['aktif'] = !empty($data['aktif']);
 
-		$event->update($data);
+		if ($event->update($event_id, $data))
+		{
+			return redirect()->back()->with('status', 'Berhasil edit event');
+		}
 
-		return redirect()->back()->with('Berhasil tambah event');
+		return redirect()->back()->with('status', 'Gagal edit event');
 	}
 
 	public function destroy($event_id)
 	{
 		$event = model('Event');
 
-		if (!$data = $event->find($event_id))
+		if (!$event->find($event_id))
 		{
 			throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
 		}
 
-		$event->delete($event_id);
+		if ($event->delete($event_id))
+		{
+			return redirect()->back()->with('status', 'Berhasil hapus event');
+		}
 
-		return redirect()->back()->with('Berhasil hapus event');
+		return redirect()->back()->with('status', 'Gagal hapus event');
+	}
+
+	public function chart($event_id)
+	{
+		$event = model('Event');
+		$team = model('Team');
+
+		if (!$event_data = $event
+			->select('events.*')
+			->select(
+				'(select count(votings.id) from votings join teams on teams.id = votings.team_id where teams.event_id = events.id) as total_pemilih')
+			->select(
+				'(select count(users.id) - 1 from users) as pemilih'
+			)
+			->find($event_id))
+		{
+			throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+		}
+
+		if ($event_data['aktif'])
+		{
+			return redirect()->back()->with('status', 'Event belum selesai');
+		}
+
+		$teams = $team
+		->select('teams.*')
+		->select(
+			'(select count(votings.id) from votings where votings.team_id = teams.id) as total_pemilih'
+		)
+		->where('event_id', $event_id)
+		->findAll();
+
+		$data = [
+			'event' => $event_data,
+			'teams' => $teams
+		];
+
+		return view('admin/event/status', $data);
+	}
+
+	public function pdf($event_id)
+	{
+		$event = model('Event');
+		$team = model('Team');
+
+		if (!$event_data = $event
+			->select('events.*')
+			->select(
+				'(select count(votings.id) from votings join teams on teams.id = votings.team_id where teams.event_id = events.id) as total_pemilih')
+			->select(
+				'(select count(users.id) - 1 from users) as pemilih'
+			)
+			->find($event_id))
+		{
+			throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+		}
+
+		if ($event_data['aktif'])
+		{
+			return redirect()->back()->with('status', 'Event belum selesai');
+		}
+
+		$teams = $team
+		->select('teams.*')
+		->select(
+			'(select count(votings.id) from votings where votings.team_id = teams.id) as total_pemilih'
+		)
+		->where('event_id', $event_id)
+		->findAll();
+
+		$total_pemilih_all = 0;
+		$html = <<< html
+			<h2 align="center">$event_data[name]</h2>
+			<table width="100%" border="1" cellspacing="0" cellpadding="10">
+				<thead>
+					<tr>
+						<th>Nama Kandidat</th>
+						<th>Total Pemilih</th>
+					</tr>
+				</thead>
+				<tbody>
+			html;
+		foreach($teams as $d)
+		{
+			$html .= <<< html
+				<tr>
+					<td>$d[name]</td>
+					<td>$d[total_pemilih]</td>
+				</tr>
+				html;
+			$total_pemilih_all += $d['total_pemilih'];
+		}
+
+		$html .= <<< html
+					<tr>
+						<td>Jumlah Pemilih</td>
+						<td>$total_pemilih_all</td>
+					</tr>
+				</tbody>
+			</table>
+			html;
+
+		$pdf = new \Dompdf\Dompdf;
+		$pdf->load_html(
+			<<< html
+			<html>
+				<head>
+					<title>Dokumen Rahasia</title>
+				</head>
+				<body>
+					$html
+				</body>
+			</html>
+			html
+		);
+
+		$pdf->render();
+		$pdf->stream();
+		exit;
 	}
 }

@@ -1,19 +1,22 @@
 <?= $this->extend('layouts/admin') ?>
 
 <?= $this->section('content_header') ?>
-Kelola Event
+<a class="btn btn-sm btn-primary" href="<?= site_url('admin/event/index') ?>">
+	<i class="fas fa-arrow-left"></i>
+</a>
+<span>Kelola Team</span>
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
 
-<?= $this->include('admin/event/create') ?>
-<?= $this->include('admin/event/edit') ?>
+<?= $this->include('admin/team/create') ?>
+<?= $this->include('admin/team/edit') ?>
 
 <div class="card">
 	<div class="card-header">
 		<div class="row">
 			<div class="col">
-				<h6 class="text-primary font-weight-bold">Daftar Event</h6>
+				<h6 class="text-primary font-weight-bold">Daftar Team</h6>
 			</div>
 			<div class="ml-auto">
 				<button type="button" class="btn btn-sm btn-outline-primary" data-toggle="modal" data-target="#modal-create">
@@ -29,29 +32,25 @@ Kelola Event
 				<tr>
 					<th>No</th>
 					<th>Nama</th>
+					<th>Gambar</th>
 					<th>Aksi</th>
 				</tr>
 			</thead>
 			<tbody>
 				<?php $i = 0; ?>
-				<?php foreach ($events as $d): ?>
+				<?php foreach ($teams as $d): ?>
 					<tr>
 						<td><?= ++$i ?></td>
 						<td><?= $d['name'] ?></td>
 						<td>
-							<a class="btn btn-sm btn-success" href="<?= site_url('admin/team/index/' . $d['id']) ?>">
-								<i class="fas fa-book"></i>
-								Team
-							</a>
-							<a data-html="true" data-toggle="tooltip" title="<i class='fas fa-info mr-2'></i>Bisa dilihat jika event sudah selesai" class="btn btn-sm btn-secondary" href="<?= $d['aktif'] ? '#' : site_url('admin/event/chart/' . $d['id']) ?>">
-								<i class="fas fa-chart-area"></i>
-								Status
-							</a>
+							<a href="<?= base_url($d['gambar']) ?>" class="btn btn-sm btn-secondary" target="_blank">Lihat</a>
+						</td>
+						<td>
 							<a class="btn btn-sm btn-primary" href="#" onclick="action_edit(<?= $d['id'] ?>)">
 								<i class="fas fa-book"></i>
 								Edit
 							</a>
-							<a class="btn btn-sm btn-danger" href="<?= site_url('admin/event/destroy/' . $d['id']) ?>" onclick="return confirm('Yakin ingin dihapus?')">
+							<a class="btn btn-sm btn-danger" href="<?= site_url('admin/team/destroy/' . $d['id']) ?>" onclick="return confirm('Yakin ingin dihapus?')">
 								<i class="fas fa-trash"></i>
 								Hapus
 							</a>
@@ -65,10 +64,4 @@ Kelola Event
 	</div>
 </div>
 
-<?= $this->endSection() ?>
-
-<?= $this->section('js') ?>
-<script type="text/javascript">
-	$('[data-toggle="tooltip"]').tooltip({'placement': 'bottom'});
-</script>
 <?= $this->endSection() ?>

@@ -14,7 +14,7 @@
 # ENVIRONMENT
 #--------------------------------------------------------------------
 
-CI_ENVIRONMENT = 'development'
+# CI_ENVIRONMENT = 'development'
 
 #--------------------------------------------------------------------
 # APP
@@ -49,11 +49,11 @@ CI_ENVIRONMENT = 'development'
 # DATABASE
 #--------------------------------------------------------------------
 
-database.default.hostname = '127.0.0.1'
-database.default.database = 'evoting_smea'
-database.default.username = 'root'
-database.default.password = ''
-database.default.DBDriver = 'MySQLi'
+# database.default.hostname = '127.0.0.1'
+# database.default.database = ''
+# database.default.username = ''
+# database.default.password = ''
+# database.default.DBDriver = 'MySQLi'
 
 # database.tests.hostname = localhost
 # database.tests.database = ci4

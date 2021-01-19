@@ -7,7 +7,7 @@ use CodeIgniter\HTTP\ResponseInterface;
 /**
  * 
  */
-class Authenticate implements FilterInterface
+class Role implements FilterInterface
 {
 	/**
 	 * Do whatever processing this filter needs to do.
@@ -24,20 +24,21 @@ class Authenticate implements FilterInterface
 	 *
 	 * @return mixed
 	 */
-	public function before(RequestInterface $request, $arguments = null)
+	public function before(RequestInterface $request, $arguments = [])
 	{
-		if (service('auth')->check())
+		if (substr($request->uri->getPath(), 0, 5) == 'admin')
 		{
-			if (in_array($request->uri->getPath(), ['home/login', 'home/postLogin']))
+			if (session('role') == 'siswa')
 			{
 				return redirect()->to('/');
 			}
 		}
-		else
+
+		if (substr($request->uri->getPath(), 0, 5) == 'siswa')
 		{
-			if (!in_array($request->uri->getPath(), ['home/login', 'home/postLogin']))
+			if (session('role') == 'admin')
 			{
-				return redirect()->to('/home/login');
+				return redirect()->to('/');
 			}
 		}
 	}

@@ -34,6 +34,8 @@ Kelola Pemilih
 				<tr>
 					<th>No</th>
 					<th>Nama</th>
+					<th>Kelas</th>
+					<th>Email</th>
 					<th>Aksi</th>
 				</tr>
 			</thead>
@@ -43,6 +45,8 @@ Kelola Pemilih
 					<tr>
 						<td><?= ++$i ?></td>
 						<td><?= $d['name'] ?></td>
+						<td><?= $d['kelas'] ?></td>
+						<td><?= $d['email'] ?></td>
 						<td>
 							<a class="btn btn-sm btn-primary" href="#" onclick="action_edit(<?= $d['id'] ?>)">
 								<i class="fas fa-book"></i>
@@ -52,17 +56,17 @@ Kelola Pemilih
 								<i class="fas fa-trash"></i>
 								Hapus
 							</a>
+							<a class="btn btn-sm btn-success" href="<?= site_url('admin/pemilih/email/' . $d['id']) ?>">
+								<i class="fas fa-envelope"></i>
+								Verifikasi
+							</a>
 						</td>
 					</tr>
 				<?php endforeach ?>
 			</tbody>
 		</table>
 
-		<div class="clearfix">
-			<div class="float-right">
-				<?= $pager->links() ?>
-			</div>
-		</div>
+		<?= $pager->links() ?>
 	</div>
 </div>
 

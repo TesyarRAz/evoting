@@ -10,7 +10,7 @@ class Pemilih extends BaseController
 	{
 		$user = model('User');
 		$data = [
-			'pemilihs' => $user->whereNotIn('id', [service('auth')->id()])->paginate(10),
+			'pemilihs' => $user->withKelas()->whereNotIn('users.id', [service('auth')->id()])->paginate(10),
 			'kelasses' => model('Kelas')->orderBy('name')->findAll(),
 			'pager' => $user->pager
 		];
@@ -21,21 +21,17 @@ class Pemilih extends BaseController
 	public function store()
 	{
 		helper('text');
+		$user = model('User');
 
 		$data = $this->request->getVar([
-			'name', 'kelas_id', 'username', 'password', 'phone'
+			'name', 'kelas_id', 'email'
 		]);
 
-		if (empty($data['username']))
-		{
-			$data['username'] = random_string();
-		}
-		if (empty($data['password']))
-		{
-			$data['password'] = random_string();
-		}
+		$data['username'] = random_string();
+		$data['password'] = random_string();
+		$data['role'] = 'siswa';
 
-		if (model('User')->insert($data))
+		if ($user->insert($data))
 		{
 			return redirect()->back()->with('status', 'Berhasil tambah pemilih');
 		}
@@ -43,51 +39,60 @@ class Pemilih extends BaseController
 		return redirect()->back()->with('status', 'Gagal tambah pemilih');
 	}
 
-	public function edit($pemilih_id)
+	public function edit($user_id)
 	{
 		if ($this->request->isAJAX())
 		{
 			$user = model('User');
 
-			if (!$pemilih = $user->find($pemilih_id))
+			if (!$user_data = $user->find($user_id))
 			{
 				throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
 			}
 
-			return $this->respond($pemilih);
+			unset($user_data['username']);
+			unset($user_data['password']);
+
+			return $this->respond($user_data);
 		}
 	}
 
-	public function update($pemilih_id)
+	public function update($user_id)
 	{
 		$user = model('User');
 
-		if (!$pemilih = $user->find($pemilih_id))
+		if (!$user->find($user_id))
 		{
 			throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
 		}
 
 		$data = $this->request->getVar([
-			'name', 'kelas_id', 'username', 'password', 'phone'
+			'name', 'kelas_id', 'email'
 		]);
 
-		$pemilih->update($data);
+		if ($user->update($user_id, $data))
+		{
+			return redirect()->back()->with('status', 'Berhasil edit pemilih');
+		}
 
-		return redirect()->back()->with('Berhasil tambah pemilih');
+		return redirect()->back()->with('status', 'Gagal edit pemilih');
 	}
 
-	public function destroy($pemilih_id)
+	public function destroy($user_id)
 	{
 		$user = model('User');
 
-		if (!$pemilih = $user->find($pemilih_id))
+		if (!$user->find($user_id))
 		{
 			throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
 		}
 
-		$user->delete($pemilih_id);
+		if ($user->delete($user_id))
+		{
+			return redirect()->back()->with('status', 'Berhasil hapus pemilih');
+		}
 
-		return redirect()->back()->with('Berhasil hapus pemilih');
+		return redirect()->back()->with('status', 'Gagal hapus pemilih');
 	}
 
 	public function import()
@@ -104,6 +109,8 @@ class Pemilih extends BaseController
 		$rows = explode(PHP_EOL, trim($data));
 
         $result = [];
+        
+        unset($rows[0]);
 
         foreach ($rows as $row)
         {
@@ -117,9 +124,9 @@ class Pemilih extends BaseController
             $result[] = [
                 'name' => trim($cells[0]),
                 'kelas_id' => $kelas->where(['name' => trim($cells[1])])->first()['id'],
-                'username' => isset($cells[2]) && !empty($cells[2]) ? $cells[2] : random_string(),
-                'password' => isset($cells[3]) && !empty($cells[3]) ? $cells[3] : random_string(),
-                'phone' => isset($cells[4]) && !empty($cells[4]) ? $cells[4] : null,
+                'email' => isset($cells[2]) && !empty($cells[2]) ? $cells[2] : null,
+                'username' => random_string(),
+                'password' => random_string(),
                 'role' => 'siswa',
             ];
         }
@@ -130,5 +137,48 @@ class Pemilih extends BaseController
         }
 
         return redirect()->back()->with('status', 'Gagal import siswa');
+	}
+
+	public function email($user_id)
+	{
+		$user = model('User');
+
+		if (!$user_data = $user->find($user_id))
+		{
+			throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+		}
+
+		return $this->sendEmail($user_data);
+	}
+
+	private function sendEmail($user_data)
+	{
+		$username = $user_data['username'];
+		$password = $user_data['password'];
+		$url_login = site_url('home/postLogin');
+
+		$email = service('email');
+		$email->setSubject('Akun Login Vote');
+		$email->setTo($user_data['email']);
+		$email->setMessage(
+			<<< html
+			<h3>Akun Anda Untuk Login Voting</h3>
+			<p>Username : $username</p>
+			<p>Password : $password</p>
+			<form action="$url_login" method="post">
+				<input type="hidden" name="username" value="$username">
+				<input type="hidden" name="password" value="$password">
+				<input type="submit" value="Klik Disini Untuk Login Dengan Mudah">
+				Jika tidak bisa <a href="$url_login">Klik Disini</a>
+			</form>
+			html
+		);
+		
+		if ($email->send())
+		{
+			return redirect()->back()->with('status', 'Berhasil kirim email login');
+		}
+
+		return redirect()->back()->with('status', 'Gagal kirim email login');
 	}
 }

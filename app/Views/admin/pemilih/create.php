@@ -22,16 +22,8 @@
 					</select>
 				</div>
 				<div class="form-group">
-					<label>Username</label>
-					<input type="text" name="username" class="form-control" placeholder="Bisa dikosongkan, otomatis generate system">
-				</div>
-				<div class="form-group">
-					<label>Password</label>
-					<input type="text" name="password" class="form-control" placeholder="Bisa dikosongkan, otomatis generate system">
-				</div>
-				<div class="form-group">
-					<label>Phone</label>
-					<input type="tlp" name="phone" class="form-control" placeholder="Optional, Untuk mengirim link login">
+					<label>Email</label>
+					<input type="email" name="phone" class="form-control" placeholder="Wajib, untuk kirim email akses">
 				</div>
 			</div>
 			<div class="modal-footer">

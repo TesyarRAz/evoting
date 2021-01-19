@@ -14,5 +14,11 @@ class User extends Model
 	protected $validationRules = [
 		'username' => 'required',
 		'password' => 'required',
+		'email' => 'required|valid_email'
 	];
+
+	public function withKelas()
+	{
+		return $this->select('users.*, kelas.name as kelas')->join('kelas', 'kelas.id = users.kelas_id');
+	}
 }
