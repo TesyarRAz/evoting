@@ -14,7 +14,6 @@ class User extends Model
 	protected $validationRules = [
 		'username' => 'required',
 		'password' => 'required',
-		'email' => 'required|valid_email'
 	];
 
 	public function withKelas()

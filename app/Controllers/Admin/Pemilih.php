@@ -23,6 +23,12 @@ class Pemilih extends BaseController
 		helper('text');
 		$user = model('User');
 
+		$this->validate([
+			'username' => 'required',
+			'password' => 'required',
+			'email' => 'required|valid_email'
+		]);
+
 		$data = $this->request->getVar([
 			'name', 'kelas_id', 'email'
 		]);
@@ -65,6 +71,12 @@ class Pemilih extends BaseController
 		{
 			throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
 		}
+		
+		$this->validate([
+			'username' => 'required',
+			'password' => 'required',
+			'email' => 'required|valid_email'
+		]);
 
 		$data = $this->request->getVar([
 			'name', 'kelas_id', 'email'
