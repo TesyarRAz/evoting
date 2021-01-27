@@ -44,7 +44,7 @@
 			$("#name-edit").val(data.name);
 			$("#keterangan-edit").val(data.keterangan);
 			$("#password-edit").val(data.password);
-			data.aktif && $("#aktif-edit").attr('checked', '');
+			data.aktif == true && $("#aktif-edit").attr('checked', '');
 
 			$("#modal-edit").modal();
 		});

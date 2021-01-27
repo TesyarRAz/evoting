@@ -47,7 +47,7 @@ class Event extends BaseController
 		$team = model('Team');
 		$voting = model('Voting');
 
-		if (!$event->find($event_id))
+		if (!$event_data = $event->find($event_id))
 		{
 			throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
 		}
@@ -72,6 +72,7 @@ class Event extends BaseController
 		{
 			return redirect()->back()->with('status', 'Anda sudah pernah ikut vote');
 		}
+
 		if (!$event_data['aktif'])
 		{
 			return redirect()->back()->with('status', 'Event sudah berakhir');

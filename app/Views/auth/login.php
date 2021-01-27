@@ -14,8 +14,8 @@ Login
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
-<div class="row p-0 m-0 h-100 justify-content-center align-items-center">
-	<div class="col-lg-4 d-lg-block d-none bg-primary" style="height: 70%">
+<div class="row p-0 m-0 w- h-100 justify-content-center align-items-center" style="height: 70%">
+	<div class="col-lg-3 d-lg-block d-none bg-primary h-50">
 		<div class="row p-0 m-0 h-100 justify-content-center align-items-center">
 			<div>
 				<h2 class="font-weight-bold text-white">E-Vote</h2>
@@ -23,14 +23,14 @@ Login
 			</div>
 		</div>
 	</div>
-	<div class="col-5 pl-lg-0" style="height: 70%">
+	<div class="col-lg-4 col-md-7 col-11 pl-lg-0 h-50">
 		<form method="post" action="<?= site_url('home/postLogin' . ($is_admin ? '?admin' : '')) ?>" class="card h-100">
 			<?= csrf_field() ?>
 			<div class="card-header bg-primary text-white">
 				<h3 class="card-title">Login</h3>
 			</div>
 			<div class="card-body">
-				<div class="row justify-content-center align-items-center h-100">
+				<div class="row justify-content-center align-items-center h-lg-100 ">
 					<div class="col">
 						<div class="form-group">
 							<label>Username</label>

@@ -9,6 +9,7 @@ Kelola Pemilih
 <?= $this->include('admin/pemilih/create') ?>
 <?= $this->include('admin/pemilih/edit') ?>
 <?= $this->include('admin/pemilih/import') ?>
+<?= $this->include('admin/pemilih/verifikasi') ?>
 
 <div class="card">
 	<div class="card-header">
@@ -17,6 +18,11 @@ Kelola Pemilih
 				<h6 class="text-primary font-weight-bold">Daftar Pemilih</h6>
 			</div>
 			<div class="ml-auto">
+
+				<button type="button" class="btn btn-sm btn-outline-primary" data-toggle="modal" data-target="#modal-verifikasi">
+					<i class="fas fa-envelope"></i>
+					Verifikasi
+				</button>
 				<button type="button" class="btn btn-sm btn-outline-primary" data-toggle="modal" data-target="#modal-import">
 					<i class="fas fa-download"></i>
 					Import
@@ -29,7 +35,7 @@ Kelola Pemilih
 		</div>
 	</div>
 	<div class="card-body">
-		<table class="table table-bordered">
+		<table class="table table-bordered table-responsive-sm">
 			<thead>
 				<tr>
 					<th>No</th>

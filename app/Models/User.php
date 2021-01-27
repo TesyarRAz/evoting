@@ -11,10 +11,10 @@ class User extends Model
 
 	protected $protectFields = false;
 
-	protected $validationRules = [
-		'username' => 'required',
-		'password' => 'required',
-	];
+	// protected $validationRules = [
+	// 	'username' => 'required',
+	// 	'password' => 'required',
+	// ];
 
 	public function withKelas()
 	{

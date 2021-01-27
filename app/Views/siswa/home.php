@@ -8,8 +8,8 @@
 		<div class="card-body">
 			<div class="row">
 				<?php foreach ($events as $event): ?>
-					<div class="col-4">
-						<div class="card">
+					<div class="col-lg-3 col-md-4 col-sm-6 my-2">
+						<div class="card h-100">
 							<div class="card-header bg-primary">
 								<h4 class="text-white font-weight-bold"><?= $event['name'] ?></h4>
 							</div>

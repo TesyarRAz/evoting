@@ -48,7 +48,7 @@
 								<img src="<?= base_url('coblos.png') ?>" class="img-paku">
 							</a>
 							<div class="card-body">
-								<h4 class="text-white font-weight-bold"><?= $team['name'] ?></h4>
+								<h4 class="font-weight-bold"><?= $team['name'] ?></h4>
 								<p class="card-text"><?= $team['deskripsi'] ?></p>
 							</div>
 						</div>

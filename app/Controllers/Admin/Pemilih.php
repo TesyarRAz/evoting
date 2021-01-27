@@ -163,6 +163,27 @@ class Pemilih extends BaseController
 		return $this->sendEmail($user_data);
 	}
 
+	public function emailBatch()
+	{
+		$user = model('User');
+
+		$kelas_id = $this->request->getVar('kelas_id');
+
+		if (empty($kelas_id))
+		{
+			return redirect()->back()->with('status', 'Kelas tidak boleh kosong');
+		}
+
+		$user_datas = $user->where('kelas_id', $kelas_id)->whereNotIn('id', [service('Auth')->id()])->findAll();
+
+		foreach ($user_datas as $user_data)
+		{
+			$this->sendEmail($user_data);
+		}
+
+		return redirect()->back()->with('status', 'Berhasil kirim link verifikasi');
+	}
+
 	private function sendEmail($user_data)
 	{
 		$username = $user_data['username'];

@@ -21,12 +21,13 @@
 					<label>Password</label>
 					<input type="text" name="password" class="form-control" placeholder="Opsional">
 				</div>
-				<div class="form-group">
+				<input type="hidden" name="aktif" value="">
+				<!-- <div class="form-group">
 					<div class="form-check">
 						<input id="aktif-create" type="checkbox" name="aktif" class="form-check-input">
 						<label for="aktif-create">Aktif</label>
 					</div>
-				</div>
+				</div> -->
 			</div>
 			<div class="modal-footer">
 				<button type="submit" class="btn btn-primary">Simpan</button>

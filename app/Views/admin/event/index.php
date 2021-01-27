@@ -24,11 +24,12 @@ Kelola Event
 		</div>
 	</div>
 	<div class="card-body">
-		<table class="table table-bordered">
+		<table class="table table-bordered table-responsive-sm">
 			<thead>
 				<tr>
 					<th>No</th>
 					<th>Nama</th>
+					<th>Status</th>
 					<th>Aksi</th>
 				</tr>
 			</thead>
@@ -38,6 +39,7 @@ Kelola Event
 					<tr>
 						<td><?= ++$i ?></td>
 						<td><?= $d['name'] ?></td>
+						<td><?= $d['aktif'] ? 'Aktif' : 'Tidak' ?></td>
 						<td>
 							<a class="btn btn-sm btn-success" href="<?= site_url('admin/team/index/' . $d['id']) ?>">
 								<i class="fas fa-book"></i>
