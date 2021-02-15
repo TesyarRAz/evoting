@@ -35,6 +35,18 @@ Kelola Pemilih
 		</div>
 	</div>
 	<div class="card-body">
+		<div class="clearfix form-group">
+			<div class="float-right">
+				<form class="input-group" method="get" action="<?= site_url('admin/pemilih/index') ?>">
+					<div class="input-group-prepend">
+						<div class="input-group-text">
+							<i class="fas fa-search"></i>
+						</div>
+					</div>
+					<input type="search" name="search" class="form-control form-control-sm" placeholder="Pencarian">
+				</form>
+			</div>
+		</div>
 		<table class="table table-bordered table-responsive-sm">
 			<thead>
 				<tr>

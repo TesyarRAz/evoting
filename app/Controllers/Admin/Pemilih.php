@@ -9,8 +9,16 @@ class Pemilih extends BaseController
 	public function index()
 	{
 		$user = model('User');
+
+		$query = $user->withKelas()->whereNotIn('users.id', [service('auth')->id()]);
+
+		if (!empty($search = $this->request->getGet('search')))
+		{
+			$query->like('users.name', $search)->orLike('kelas.name', $search);
+		}
+
 		$data = [
-			'pemilihs' => $user->withKelas()->whereNotIn('users.id', [service('auth')->id()])->paginate(10),
+			'pemilihs' => $query->paginate(10),
 			'kelasses' => model('Kelas')->orderBy('name')->findAll(),
 			'pager' => $user->pager
 		];
@@ -130,7 +138,7 @@ class Pemilih extends BaseController
 
             if (count($cells) < 3)
             {
-                return back()->with('status', 'Cell CSV minimal 3, untuk nama, nis, dan kelas');
+                return redirect()->back()->with('status', 'Cell CSV minimal 3, untuk nama, kelas dan email');
             }
 
             $result[] = [

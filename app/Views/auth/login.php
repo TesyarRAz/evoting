@@ -31,19 +31,27 @@ Login
 			</div>
 			<div class="card-body">
 				<div class="row justify-content-center align-items-center h-lg-100 ">
-					<div class="col">
+					<div class="col-12">
 						<div class="form-group">
 							<label>Username</label>
 							<input type="text" name="username" class="form-control" required>
 							<?php if (session()->has('status')): ?>
-							<span class="text-danger"><?= session('status') ?></span>
-						<?php endif ?>
+								<span class="text-danger"><?= session('status') ?></span>
+							<?php endif ?>
+						</div>
 					</div>
-					<div class="form-group">
-						<label>Password</label>
-						<input type="password" name="password" class="form-control" required>
-					</div><div class="clearfix">
-						<button class="btn btn-primary float-right">Masuk</button>
+					<div class="col-12">
+						<div class="form-group">
+							<label>Password</label>
+							<input type="password" name="password" class="form-control" required>
+						</div>
+					</div>
+					<div class="col-12">
+						<div class="form-group">
+							<div class="clearfix">
+								<button class="btn btn-primary float-right">Masuk</button>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>

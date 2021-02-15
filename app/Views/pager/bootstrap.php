@@ -29,12 +29,12 @@
 			</li>
 		<?php endif ?>
 
-		<li class="page-item <?= !$pager->hasPrevious() ? 'disabled' : '' ?>">
+		<li class="page-item <?= !$pager->hasNext() ? 'disabled' : '' ?>">
 			<a class="page-link" href="<?= $pager->getNext() ?>" aria-label="<?= lang('Pager.next') ?>">
 				<span aria-hidden="true">&raquo;</span>
 			</a>
 		</li>
-		<li class="page-item <?= !$pager->hasPrevious() ? 'disabled' : '' ?>">
+		<li class="page-item <?= !$pager->hasNext() ? 'disabled' : '' ?>">
 			<a class="page-link" href="<?= $pager->getLast() ?>" aria-label="<?= lang('Pager.last') ?>">
 				<span aria-hidden="true"><?= lang('Pager.last') ?></span>
 			</a>
