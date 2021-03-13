@@ -22,6 +22,38 @@ Status Event : <?= $event['name'] ?>
 		</div>
 	</div>
 </div>
+<div class="card">
+	<div class="card-body">
+		<h5 class="leading">Total Pemilih: <?= $total_pemilih ?></h5>
+		<table class="table table-bordered table-responsive-sm">
+			<thead>
+				<tr>
+					<th>Kelas</th>
+					<th>Total</th>
+					<th>Laporan</th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php foreach ($kelasses as $kelas): ?>
+					<tr>
+						<td>
+							<?= $kelas['name'] ?>
+						</td>
+						<td>
+							<?= $kelas['total_pemilih'] ?>
+						</td>
+						<td>
+							<a href="<?= site_url('admin/event/absen/' . $event['id'] . '/' . $kelas['id']) ?>" target="_blank" class="btn btn-sm btn-primary">
+								<i class="fas fa-upload"></i>
+								Cetak
+							</a>
+						</td>
+					</tr>
+				<?php endforeach ?>
+			</tbody>
+		</table>
+	</div>
+</div>
 <?= $this->endSection() ?>
 <?= $this->section('js') ?>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.bundle.min.js"></script>

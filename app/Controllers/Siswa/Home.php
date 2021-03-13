@@ -9,7 +9,7 @@ class Home extends BaseController
 		$event = model('Event');
 
 		$data = [
-			'events' => $event->orderBy('id', 'desc')->findAll()
+			'events' => $event->where('aktif', true)->orderBy('id', 'desc')->findAll()
 		];
 
 		return view('siswa/home', $data);

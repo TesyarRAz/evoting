@@ -40,12 +40,14 @@ Login
 							<?php endif ?>
 						</div>
 					</div>
-					<div class="col-12">
-						<div class="form-group">
-							<label>Password</label>
-							<input type="password" name="password" class="form-control" required>
+					<?php if ($is_allow_password || $is_admin): ?>
+						<div class="col-12">
+							<div class="form-group">
+								<label>Password</label>
+								<input type="password" name="password" class="form-control" required>
+							</div>
 						</div>
-					</div>
+					<?php endif ?>
 					<div class="col-12">
 						<div class="form-group">
 							<div class="clearfix">

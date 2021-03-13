@@ -159,6 +159,79 @@ class Pemilih extends BaseController
         return redirect()->back()->with('status', 'Gagal import siswa');
 	}
 
+	public function export()
+	{
+		$user = model('User');
+		$kelas = model('Kelas');
+
+		$kelas_id = $this->request->getVar('kelas_id');
+
+		if (empty($kelas_id))
+		{
+			return redirect()->back()->with('status', 'Kelas tidak boleh kosong');
+		}
+
+		if (!$kelas_data = $kelas->find($kelas_id))
+		{
+			return redirect()->back()->with('status', 'Kelas tidak ditermukan');
+		}
+
+		$user_datas = $user->where('kelas_id', $kelas_id)->whereNotIn('id', [
+			service('Auth')->id()
+		])->findAll();
+
+		$html = <<< html
+			<h2 align="center">Export Kelas $kelas_data[name]</h2>
+			<table width="100%" border="1" cellspacing="0" cellpadding="10">
+				<thead>
+					<tr>
+						<th>No</th>
+						<th>Nama Siswa</th>
+						<th>Username</th>
+						<th>Password</th>
+					</tr>
+				</thead>
+				<tbody>
+			html;
+
+		$i = 0;
+		foreach($user_datas as $d)
+		{
+			$c = ++$i;
+			$html .= <<< html
+				<tr>
+					<td align="center">$c</td>
+					<td>$d[name]</td>
+					<td>$d[username]</td>
+					<td>$d[password]</td>
+				</tr>
+				html;
+		}
+
+		$html .= <<< html
+				</tbody>
+			</table>
+			html;
+
+		$pdf = new \Dompdf\Dompdf;
+		$pdf->load_html(
+			<<< html
+			<html>
+				<head>
+					<title>Dokumen Rahasia</title>
+				</head>
+				<body>
+					$html
+				</body>
+			</html>
+			html
+		);
+
+		$pdf->render();
+		$pdf->stream();
+		exit;
+	}
+
 	public function email($user_id)
 	{
 		$user = model('User');

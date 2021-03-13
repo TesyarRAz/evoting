@@ -1,4 +1,4 @@
-<form method="post" class="modal fade" tabindex="-1" role="dialog" id="modal-edit">
+<form method="post" class="modal fade" tabindex="-1" role="dialog" id="modal-edit" enctype="multipart/form-data">
 	<?= csrf_field() ?>
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">

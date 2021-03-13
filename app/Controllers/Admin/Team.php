@@ -54,7 +54,7 @@ class Team extends BaseController
 
 		$gambar = $this->request->getFile('gambar');
 		$gambar_name = $gambar->getRandomName();
-		$gambar->move(ROOTPATH.'public/uploads', $gambar_name);
+		$gambar->move(FCPATH.'uploads', $gambar_name);
 
 		$data['gambar'] = 'uploads/'.$gambar_name;
 		$data['event_id'] = $event_id;
@@ -106,7 +106,7 @@ class Team extends BaseController
 
 			$gambar = $this->request->getFile('gambar');
 			$gambar_name = $gambar->getRandomName();
-			$gambar->move(ROOTPATH.'public/uploads', $gambar_name);
+			$gambar->move(FCPATH.'uploads', $gambar_name);
 
 			$data['gambar'] = 'uploads/'.$gambar_name;
 		}

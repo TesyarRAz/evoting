@@ -13,7 +13,8 @@ class Home extends BaseController
 	public function login()
 	{
 		return view('auth/login', [
-			'is_admin' => isset($_GET['admin'])
+			'is_admin' => isset($_GET['admin']),
+			'is_allow_password' => true
 		]);
 	}
 
@@ -21,7 +22,15 @@ class Home extends BaseController
 	{
 		$hash = isset($_GET['admin']);
 
-		if (service('auth')->attempt($this->request->getPost(['username', 'password']), $hash))
+		$credentials = $this->request->getPost(['username', 'password']);
+
+		// Allow User To Login without password
+		// if (!$hash)
+		// {
+		// 	unset($credentials['password']);
+		// }
+
+		if (service('auth')->attempt($credentials, $hash))
 		{
 			return redirect()->to('/');
 		}

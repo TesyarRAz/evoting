@@ -97,6 +97,7 @@ class Event extends BaseController
 	{
 		$event = model('Event');
 		$team = model('Team');
+		$kelas = model('Kelas');
 
 		if (!$event_data = $event
 			->select('events.*')
@@ -123,9 +124,23 @@ class Event extends BaseController
 		->where('event_id', $event_id)
 		->findAll();
 
+		$kelasses = $kelas
+		->select('kelas.*')
+		->selectCount('votings.id', 'total_pemilih')
+		->join('users', 'users.kelas_id = kelas.id')
+		->join('votings', 'votings.user_id = users.id')
+		->join('teams', 'votings.team_id = teams.id')
+		->groupBy('kelas.id')
+		->where('teams.event_id', $event_id)
+		->findAll();
+
+		$total_pemilih = array_reduce(array_map(fn($i) => $i['total_pemilih'], $kelasses), fn($a, $b) => $a + $b);
+
 		$data = [
 			'event' => $event_data,
-			'teams' => $teams
+			'teams' => $teams,
+			'kelasses' => $kelasses,
+			'total_pemilih' => $total_pemilih,
 		];
 
 		return view('admin/event/status', $data);
@@ -189,6 +204,89 @@ class Event extends BaseController
 						<td>Jumlah Pemilih</td>
 						<td>$total_pemilih_all</td>
 					</tr>
+				</tbody>
+			</table>
+			html;
+
+		$pdf = new \Dompdf\Dompdf;
+		$pdf->load_html(
+			<<< html
+			<html>
+				<head>
+					<title>Dokumen Rahasia</title>
+				</head>
+				<body>
+					$html
+				</body>
+			</html>
+			html
+		);
+
+		$pdf->render();
+		$pdf->stream();
+		exit;
+	}
+
+	public function absen($event_id, $kelas_id)
+	{
+		$event = model('Event');
+		$user = model('User');
+		$kelas = model('Kelas');
+
+		if (!$event_data = $event->find($event_id))
+		{
+			throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+		}
+
+		if (!$kelas_data = $kelas->find($kelas_id))
+		{
+			throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+		}
+
+		if ($event_data['aktif'])
+		{
+			return redirect()->back()->with('status', 'Event belum selesai');
+		}
+
+		$votings = $user
+		->select('users.name, teams.id')
+		->join('votings', 'users.id = votings.user_id', 'left')
+		->join('teams', 'votings.team_id = teams.id AND teams.event_id = ' . $user->escape($event_id), 'left')
+		->set('event', $event_id)
+		->where('users.kelas_id', $kelas_id)
+		->orderBy('users.name')
+		->groupBy('users.id')
+		->findAll();
+
+		$html = <<< html
+			<h2 align="center">$event_data[name]</h2>
+			<h4>Kelas: $kelas_data[name]<h4>
+			<table width="100%" border="1" cellspacing="0" cellpadding="10">
+				<thead>
+					<tr>
+						<th>No</th>
+						<th>Nama Siswa</th>
+						<th>Absen</th>
+					</tr>
+				</thead>
+				<tbody>
+			html;
+
+		$i = 0;
+		foreach($votings as $d)
+		{
+			$i++;
+			$absen = !empty($d['id']) ? 'Hadir' : 'Tidak Hadir';
+			$html .= <<< html
+				<tr>
+					<td>$i</td>
+					<td>$d[name]</td>
+					<td>$absen</td>
+				</tr>
+				html;
+		}
+
+		$html .= <<< html
 				</tbody>
 			</table>
 			html;

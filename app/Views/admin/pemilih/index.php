@@ -9,6 +9,7 @@ Kelola Pemilih
 <?= $this->include('admin/pemilih/create') ?>
 <?= $this->include('admin/pemilih/edit') ?>
 <?= $this->include('admin/pemilih/import') ?>
+<?= $this->include('admin/pemilih/export') ?>
 <?= $this->include('admin/pemilih/verifikasi') ?>
 
 <div class="card">
@@ -26,6 +27,10 @@ Kelola Pemilih
 				<button type="button" class="btn btn-sm btn-outline-primary" data-toggle="modal" data-target="#modal-import">
 					<i class="fas fa-download"></i>
 					Import
+				</button>
+				<button type="button" class="btn btn-sm btn-outline-primary" data-toggle="modal" data-target="#modal-export">
+					<i class="fas fa-upload"></i>
+					Export
 				</button>
 				<button type="button" class="btn btn-sm btn-outline-primary" data-toggle="modal" data-target="#modal-create">
 					<i class="fas fa-plus"></i>
