@@ -15,9 +15,9 @@ Status Event : <?= $event['name'] ?>
 				<canvas data-toggle="chart-team"></canvas>
 			</div>
 			<div class="col-lg-6 my-3">
-				<object data="<?= site_url('admin/event/pdf/' . $event['id']) ?>" type="application/pdf" width="100%" height="100%">
+				<!-- <object data="<?= site_url('admin/event/pdf/' . $event['id']) ?>" type="application/pdf" width="100%" height="100%"> -->
 				  <p class="text-center">Download File Laporan <a target="_blank" href="<?= site_url('admin/event/pdf/' . $event['id']) ?>">Disini</a></p>
-				</object>
+				<!-- </object> -->
 			</div>
 		</div>
 	</div>
@@ -72,12 +72,14 @@ Status Event : <?= $event['name'] ?>
 		var randomColor = () => "#" + Math.floor(Math.random()*16777215).toString(16);
 		var teams = <?= json_encode($teams) ?>;
 
+		var pemilihChart, teamChart;
+
 		$("[data-toggle=chart-pemilih]").each((_, item) => {
 			const ctx = item.getContext('2d');
 
 			const data = <?= json_encode($event) ?>;
 
-			var chart = new Chart(ctx, {
+			pemilihChart = new Chart(ctx, {
 				type: 'pie',
 				data: {
 					datasets: [{
@@ -105,9 +107,7 @@ Status Event : <?= $event['name'] ?>
 		$("[data-toggle=chart-team]").each((_, c) => {
 			const ctx = c.getContext('2d');
 
-			console.log(teams);
-
-			var chart = new Chart(ctx, {
+			teamChart = new Chart(ctx, {
 				type: 'bar',
 				data: {
 					datasets: [{
@@ -121,7 +121,13 @@ Status Event : <?= $event['name'] ?>
 					responsive: true
 				}
 			});
-		})
+		});
+
+		// var eventSource = new EventSource('<?= site_url('admin/event/stream/' . $event['id']) ?>', { withCredentials: true });
+
+		// eventSource.onmessage = function(event) {
+		// 	console.log(event);
+		// };
 	});
 </script>
 <?= $this->endSection() ?>

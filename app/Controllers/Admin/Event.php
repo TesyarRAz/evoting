@@ -111,10 +111,10 @@ class Event extends BaseController
 			throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
 		}
 
-		if ($event_data['aktif'])
-		{
-			return redirect()->back()->with('status', 'Event belum selesai');
-		}
+		// if ($event_data['aktif'])
+		// {
+		// 	return redirect()->back()->with('status', 'Event belum selesai');
+		// }
 
 		$teams = $team
 		->select('teams.*')
@@ -146,6 +146,69 @@ class Event extends BaseController
 		return view('admin/event/status', $data);
 	}
 
+	public function stream($event_id)
+	{
+		$event = model('Event');
+		$team = model('Team');
+		$kelas = model('Kelas');
+
+		header('Content-Type: text/event-stream');
+		header('Cache-Control: no-cache');
+
+		while (true) {
+			if(connection_aborted()) exit();
+
+			if (!$event_data = $event
+				->select('events.*')
+				->select(
+					'(select count(votings.id) from votings join teams on teams.id = votings.team_id where teams.event_id = events.id) as total_pemilih')
+				->select(
+					'(select count(users.id) - 1 from users) as pemilih'
+				)
+				->find($event_id))
+			{
+				throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+			}
+
+			// if ($event_data['aktif'])
+			// {
+			// 	return redirect()->back()->with('status', 'Event belum selesai');
+			// }
+
+			$teams = $team
+			->select('teams.*')
+			->select(
+				'(select count(votings.id) from votings where votings.team_id = teams.id) as total_pemilih'
+			)
+			->where('event_id', $event_id)
+			->findAll();
+
+			$kelasses = $kelas
+			->select('kelas.*')
+			->selectCount('votings.id', 'total_pemilih')
+			->join('users', 'users.kelas_id = kelas.id')
+			->join('votings', 'votings.user_id = users.id')
+			->join('teams', 'votings.team_id = teams.id')
+			->groupBy('kelas.id')
+			->where('teams.event_id', $event_id)
+			->findAll();
+
+			$total_pemilih = array_reduce(array_map(fn($i) => $i['total_pemilih'], $kelasses), fn($a, $b) => $a + $b);
+
+			$data = [
+				'event' => $event_data,
+				'teams' => $teams,
+				'kelasses' => $kelasses,
+				'total_pemilih' => $total_pemilih,
+			];
+
+			echo json_encode($data) . '\n\n';
+
+			flush();
+			usleep(1000 * 200);
+		}
+	}
+
 	public function pdf($event_id)
 	{
 		$event = model('Event');
@@ -163,10 +226,10 @@ class Event extends BaseController
 			throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
 		}
 
-		if ($event_data['aktif'])
-		{
-			return redirect()->back()->with('status', 'Event belum selesai');
-		}
+		// if ($event_data['aktif'])
+		// {
+		// 	return redirect()->back()->with('status', 'Event belum selesai');
+		// }
 
 		$teams = $team
 		->select('teams.*')
@@ -209,7 +272,7 @@ class Event extends BaseController
 			html;
 
 		$pdf = new \Dompdf\Dompdf;
-		$pdf->load_html(
+		$pdf->loadHtml(
 			<<< html
 			<html>
 				<head>
@@ -243,10 +306,10 @@ class Event extends BaseController
 			throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
 		}
 
-		if ($event_data['aktif'])
-		{
-			return redirect()->back()->with('status', 'Event belum selesai');
-		}
+		// if ($event_data['aktif'])
+		// {
+		// 	return redirect()->back()->with('status', 'Event belum selesai');
+		// }
 
 		$votings = $user
 		->select('users.name, teams.id')
@@ -292,7 +355,7 @@ class Event extends BaseController
 			html;
 
 		$pdf = new \Dompdf\Dompdf;
-		$pdf->load_html(
+		$pdf->loadHtml(
 			<<< html
 			<html>
 				<head>

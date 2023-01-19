@@ -45,7 +45,7 @@ Kelola Event
 								<i class="fas fa-book"></i>
 								Team
 							</a>
-							<a data-html="true" data-toggle="tooltip" title="<i class='fas fa-info mr-2'></i>Bisa dilihat jika event sudah selesai" class="btn btn-sm btn-secondary" href="<?= $d['aktif'] ? '#' : site_url('admin/event/chart/' . $d['id']) ?>">
+							<a data-html="true" data-toggle="tooltip" title="<i class='fas fa-info mr-2'></i>Bisa dilihat jika event sudah selesai" class="btn btn-sm btn-secondary" href="<?= /* $d['aktif'] */ false ? '#' : site_url('admin/event/chart/' . $d['id']) ?>">
 								<i class="fas fa-chart-area"></i>
 								Status
 							</a>
